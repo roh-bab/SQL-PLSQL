@@ -14,11 +14,10 @@ create table student
 		marks number,
 		city varchar(20) );
 
-insert into student values
-	(101,'Rahul','Shah','1990-12-01',85,'Ahmedabad'),
-	(102,'Amit','Verma','1992-09-03',90,'Delhi'),
-	(103,'Hitesh','Sharma','1991-08-04',56, 'Mumbai'),
-	(104,'Jay','Modi','1995-05-09',60, 'Ahmedabad');	
+insert into student 
+    Select 105, 'Lokesh', 'Lavya',to_date('1990-02-01','yyyy/mm/dd'),85,'Ahmedabad' from dual
+    union all
+    select 106, 'Peter', 'Mohato', to_date('1994-02-01','yyyy/mm/dd'),90,'Jamshedpur' from dual;	
 
 select 	id as Student_ID, 
 		dob as Birth_Date,
