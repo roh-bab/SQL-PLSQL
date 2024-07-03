@@ -6,18 +6,21 @@ Author : Rohit Babu
 */
 
 
+/*create table*/
 create table student
-	(	id number primary key, 
-		firstname varchar(20) not null ,
+	(	id int primary key, 
+		firstname varchar(20) not null,
 		lastname varchar(20),
 		dob date,
-		marks number,
-		city varchar(20) );
+		city varchar(20),
+        marks number);
 
-insert into student 
-    Select 105, 'Lokesh', 'Lavya',to_date('1990-02-01','yyyy/mm/dd'),85,'Ahmedabad' from dual
-    union all
-    select 106, 'Peter', 'Mohato', to_date('1994-02-01','yyyy/mm/dd'),90,'Jamshedpur' from dual;	
+
+/*insert multiple records.*/
+  INSERT ALL
+    INTO student (id, firstname, lastname,dob,marks) VALUES (107, 'Opera', 'Lavya',to_date('1990-02-01','yyyy/mm/dd'),85)
+    INTO student (id, firstname, lastname,dob,marks) VALUES (108, 'Minakshi', 'Mohato', to_date('1994-02-01','yyyy/mm/dd'),85)
+    SELECT 1 FROM dual;	
 
 select 	id as Student_ID, 
 		dob as Birth_Date,
