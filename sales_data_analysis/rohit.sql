@@ -1,0 +1,20 @@
+CREATE TABLE sales_data_1 (
+    date_            NUMBER,
+    day_             VARCHAR2(20),
+    month_           VARCHAR2(20),
+    year_            VARCHAR2(20),
+    customer_age     NUMBER,
+    age_group        VARCHAR2(20),
+    customer_gender  VARCHAR2(20),
+    country          VARCHAR2(20),
+    state            VARCHAR2(20),
+    product_category VARCHAR2(20),
+    sub_category     VARCHAR2(20),
+    product          VARCHAR2(20),
+    order_quantity   NUMBER,
+    unit_cost        NUMBER,
+    unit_price       NUMBER,
+    profit           NUMBER,
+    cost_of_product  NUMBER,
+    revenue          NUMBER
+);
