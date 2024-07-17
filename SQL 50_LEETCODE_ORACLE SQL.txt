@@ -36,3 +36,34 @@ Select V.customer_id,count(1) as count_no_trans from Visits V left join Transact
 
 Select id from Weather W where W.temperature > (Select W1.temperature from Weather W1 where W.recordDate = (W1.recordDate+ 1));
 
+--1661. Average Time of Process per Machine
+
+with newtable as (Select machine_id,process_id ,(select sum(timestamp) from activity A2 where a1.machine_id = a2.machine_id and a1.process_id =a2.process_id
+and a2.activity_type = 'start' and a1.activity_type=a2.activity_type) start_time
+,(select sum(timestamp) from activity A2 where a1.machine_id = a2.machine_id and a1.process_id =a2.process_id
+and a2.activity_type = 'end' and a1.activity_type=a2.activity_type) end_time
+from activity A1 order by machine_id,process_id,start_time),
+onlyStart as (select start_time,process_id,machine_id from newtable where start_time is not null),
+onlyEnd as (select end_time,process_id,machine_id from newtable where end_time is not null)
+
+Select onlyStart.machine_id,round(avg(onlyEnd.end_time-onlyStart.start_time),3) processing_time from onlyStart,onlyEnd where onlyStart.machine_id=onlyEnd.machine_id
+group by onlyStart.machine_id;
+
+--EXPLAINATION GIVEN IN ATTACHED DOC SQL 50 EXPLAINATION.docs--
+
+--577 EMPLOYEE BONUS
+
+Select name,bonus from (Select E.name,b.bonus from Employee E left join Bonus B on E.empId=B.empId) where bonus <1000 or bonus is null;
+
+1280. Students and Examinations
+
+Select st.student_id student_id,st.student_name student_name ,sub.subject_name subject_name ,count(ex.subject_name) attended_exams  from Students St cross join Subjects Sub left join examinations ex 
+on ex.student_id = st.student_id
+and sub.subject_name = ex.subject_name
+ group by st.student_id,st.student_name,sub.subject_name   order by st.student_id ,sub.subject_name;
+
+570. Managers with at Least 5 Direct Reports
+
+Select name from employee where id in (Select e.id from Employee e ,Employee e1 where e1.managerId = e.Id
+group by e.id having count(1)>4);
+
