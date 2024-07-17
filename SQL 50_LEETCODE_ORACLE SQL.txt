@@ -67,3 +67,15 @@ and sub.subject_name = ex.subject_name
 Select name from employee where id in (Select e.id from Employee e ,Employee e1 where e1.managerId = e.Id
 group by e.id having count(1)>4);
 
+1934. Confirmation Rate
+
+Select S.user_id,round((Select count(1)from Confirmations C where C.user_id = S.user_id and C.action = 'confirmed')/count(1),2) confirmation_rate from Signups S left join Confirmations C on S.user_id = C.user_id
+group by S.user_id;
+
+620. Not Boring Movies
+
+Select * from Cinema C where C.description <> 'boring' and mod(C.id,2) <> 0 order by rating desc;
+
+1075. Project Employees I
+
+SELECT p.project_id, ROUND(AVG(e.experience_years),2) AS average_years FROM Project p LEFT JOIN Employee e ON p.employee_id = e.employee_id GROUP BY p.project_id;
