@@ -85,3 +85,12 @@ SELECT p.project_id, ROUND(AVG(e.experience_years),2) AS average_years FROM Proj
 Select P.product_id , nvl(round(sum((P.price*U.units))/sum(U.units),2),0)average_price from Prices P left join UnitsSold U on P.product_id = U.product_id
 and U.purchase_date between P.start_date and P.end_date
 group by P.product_id;
+
+1211. Query Quality and Percentage
+
+Select Q2.query_name,round(avg(Q2.rating/Q2.position),2) quality,round((Select count(Q1.rating)*100 from Queries Q1 where Q1.query_name =Q2.query_name and Q1.rating < 3)/count(1),2) poor_query_percentage  from Queries Q2 where Q2.query_name is not null group by Q2.Query_name order by quality;
+
+1193. Monthly Transactions I
+
+Select to_CHAR(trans_date,'YYYY-MM') month,country,count(amount) trans_count,sum(case when state = 'approved' then 1 else 0 end) approved_count,sum(amount) trans_total_amount,sum(case when state = 'approved' then amount else 0 end) approved_total_amount FROM TRANSACTIONS group by to_CHAR(trans_date,'YYYY-MM'),country;
+
