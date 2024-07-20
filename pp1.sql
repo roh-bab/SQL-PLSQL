@@ -33,6 +33,8 @@ Term_no	Trx_no	amount	coupon
 12	8	18	1*/
  
 -- Create and insert script
+create table trx (Term_no number,	Trx_no number,	amount number,	Trx_date date);
+create table ticket (Term_no number,	Trx_no number,	amount number,	coupon number);
 
 Insert into TRX (TERM_NO,TRX_NO,AMOUNT,TRX_DATE) values (10,1,10,to_date('02/10/2024','DD/MM/YYYY'));
 Insert into TRX (TERM_NO,TRX_NO,AMOUNT,TRX_DATE) values (10,2,11,to_date('02/10/2024','DD/MM/YYYY'));
@@ -115,7 +117,7 @@ WHERE
 GROUP BY
     trunc(t.trx_date),
     t.term_no; 
-/*4.	Select all records from TRX table which don’t have records in TICKET table.*/
+/*4.	Select all records from TRX table which donâ€™t have records in TICKET table.*/
 
 with tab1 as (Select term_no,trx_no from trx
 minus
@@ -124,7 +126,7 @@ Select * from trx t,tab1 where t.term_no = tab1.term_no and t.trx_no = tab1.trx_
 
 /*5.	TRX_NO should be in sequence for each terminal number. Find a missing trx_no per terminal. Format output
 Term_no
-prev_trx_no – last trx number before gap next_trx_no – next trx number after gap gap_count*/
+prev_trx_no â€“ last trx number before gap next_trx_no â€“ next trx number after gap gap_count*/
 
 	SELECT t1.term_no,t1.trx_no ,t1.trx_no + 1 AS "last",
        	MIN(t2.trx_no)  AS "next"
@@ -140,7 +142,7 @@ Write query which will show you records with mismatch in amounts.*/
 where trx.term_no = ticket.term_no and trx.trx_no = ticket.trx_no
 and trx.amount <> ticket.amount; 
 /*7.	Validate if transaction amount is this same between TRX and TICKET table per term/trx number.
-Find records which doesn’t match.
+Find records which doesnâ€™t match.
 Format
 Term number Trx_no
 Trx amount Ticket amount
@@ -152,6 +154,6 @@ and trx.amount <> ticket.amount;
 
 
 /*8.	In TRX table we need to increase trx_no for terminal number 10 for + 150.write query which will increase trx_no for terminal 10 for
-    + 150 – trx_no 1 will became 151.*/
+    + 150 â€“ trx_no 1 will became 151.*/
 		
 	 Update trx set trx_no = trx_no + 150 where term_no = 10;
