@@ -109,6 +109,9 @@ and D.order_date = D.customer_pref_delivery_date)/(Select count(distinct custome
 select distinct teacher_id,(Select count(distinct subject_id) from teacher T2 where T1.teacher_id = T2.teacher_id) cnt from Teacher T1;
 
 1141. User Activity for the Past 30 days I
+
+Select to_char(A1.activity_date,'YYYY-MM-DD') day,(Select count(distinct A2.user_id) from Activity A2 where A1.activity_date = A2.activity_date) active_users from Activity A1 where A1.activity_date <= to_date('2019-07-27','YYYY-MM-DD') AND A1.activity_date > to_date('2019-07-27','YYYY-MM-DD') - 30  group by activity_date;
+
 1070. Product Sales Analysis III
 
 Select S.product_id,S.year first_year,S.quantity,S.price from Sales S , Product P where S.product_id = P.product_id and S.year = (Select min(year) from Sales S1 where S1.product_id = S.product_id);
@@ -137,7 +140,6 @@ Select employee_id,department_id from (Select employee_id,department_id,primary_
 Select T.*, (case when (x+y>z and y+z>x and z+x>y) then 'Yes' else 'No' end) triangle from Triangle T;
 
 180. Consecutive Numbers
-
 Select distinct num ConsecutiveNums from (SELECT 
         LAG(id) OVER (ORDER BY id) AS prev_id,
         id,
@@ -150,8 +152,3 @@ Select distinct num ConsecutiveNums from (SELECT
     and id = next_id -1
     and num = prev_num
     and num = next_num;
-
-1141. User Activity for the Past 30 days I
-Select to_char(A1.activity_date,'YYYY-MM-DD') day,(Select count(distinct A2.user_id) from Activity A2 where A1.activity_date = A2.activity_date) active_users from Activity A1 where A1.activity_date <= to_date('2019-07-27','YYYY-MM-DD') AND A1.activity_date > to_date('2019-07-27','YYYY-MM-DD') - 30  group by activity_date;
-
-	
