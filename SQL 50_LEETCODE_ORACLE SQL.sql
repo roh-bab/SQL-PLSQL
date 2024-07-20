@@ -94,3 +94,64 @@ Select Q2.query_name,round(avg(Q2.rating/Q2.position),2) quality,round((Select c
 
 Select to_CHAR(trans_date,'YYYY-MM') month,country,count(amount) trans_count,sum(case when state = 'approved' then 1 else 0 end) approved_count,sum(amount) trans_total_amount,sum(case when state = 'approved' then amount else 0 end) approved_total_amount FROM TRANSACTIONS group by to_CHAR(trans_date,'YYYY-MM'),country;
 
+550. Game Play Analysis IV
+
+select round(((Select count(1) from Activity A1 , Activity A2 where A1.player_id = A2.player_id 
+and A1.event_date + 1 = A2.event_date and A1.event_date = (Select min(A3.event_date) from Activity A3 where A3.player_id = A1.player_id))/(Select count(distinct player_id) from Activity A)),2) fraction from dual;
+
+1174. Immediate Food Delivery II
+
+Select round((Select count(1)*100 from Delivery D where D.order_date = (Select min(order_date) from Delivery D1 where D.customer_id = D1.customer_id)
+and D.order_date = D.customer_pref_delivery_date)/(Select count(distinct customer_id) from Delivery D2),2) immediate_percentage from dual;
+
+2356. Number of Unique Subjects Taught by Each Teacher
+
+select distinct teacher_id,(Select count(distinct subject_id) from teacher T2 where T1.teacher_id = T2.teacher_id) cnt from Teacher T1;
+
+1141. User Activity for the Past 30 days I
+1070. Product Sales Analysis III
+
+Select S.product_id,S.year first_year,S.quantity,S.price from Sales S , Product P where S.product_id = P.product_id and S.year = (Select min(year) from Sales S1 where S1.product_id = S.product_id);
+
+596. Classes More Than 5 Students
+
+Select class from Courses group by class having count(1) >= 5;
+
+1729. Find Followers Count
+
+Select F.user_id,count(F.follower_id) followers_count from Followers F group by F.user_id order by F.user_id asc;
+
+Select max(num) num from (Select num from MyNumbers group by num having count(1)<2);
+
+1731. The Number of Employees Which Report to Each Employee
+
+Select E1.employee_id,E1.name,(Select count(E3.employee_id)from Employees E3 where E3.reports_to = E1.employee_id ) reports_count,(Select round(avg(E3.age)) from Employees E3 where E3.reports_to = E1.employee_id ) average_age from Employees E1 , Employees E2 where E1.employee_id = E2.reports_to group by E1.employee_id,E1.name order by E1.employee_id;
+
+1789. Primary Department for Each Employee
+
+Select employee_id,department_id from (Select employee_id,department_id,primary_flag,(case when(Select count(1) from Employee E1 where E1.employee_id = E.employee_id)=1 then 'Y' else 'N' end) flag  from Employee E) where  primary_flag = 'Y' or flag = 'Y';
+
+
+610. Triangle Judgement
+
+Select T.*, (case when (x+y>z and y+z>x and z+x>y) then 'Yes' else 'No' end) triangle from Triangle T;
+
+180. Consecutive Numbers
+
+Select distinct num ConsecutiveNums from (SELECT 
+        LAG(id) OVER (ORDER BY id) AS prev_id,
+        id,
+        LEAD(id) OVER (ORDER BY id) AS next_id,
+        LAG(num) OVER (ORDER BY id) AS prev_num,
+        num,
+        LEAD(num) OVER (ORDER BY id) AS next_num
+    FROM logs)
+    where id = prev_id +1
+    and id = next_id -1
+    and num = prev_num
+    and num = next_num;
+
+1141. User Activity for the Past 30 days I
+Select to_char(A1.activity_date,'YYYY-MM-DD') day,(Select count(distinct A2.user_id) from Activity A2 where A1.activity_date = A2.activity_date) active_users from Activity A1 where A1.activity_date <= to_date('2019-07-27','YYYY-MM-DD') AND A1.activity_date > to_date('2019-07-27','YYYY-MM-DD') - 30  group by activity_date;
+
+	
