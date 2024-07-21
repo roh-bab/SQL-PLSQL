@@ -152,3 +152,88 @@ Select distinct num ConsecutiveNums from (SELECT
     and id = next_id -1
     and num = prev_num
     and num = next_num;
+
+1204. Last Person to Fit in the Bus
+
+Select person_name from (Select person_name , sum(weight)  over(order by turn) Sum_weight from Queue order by sum_weight desc ) where sum_weight <= 1000 and rownum = 1;
+
+1907. Count Salary Categories
+
+with big_table as (Select account_id,(case when income < 20000 then 'Low Salary' 
+when income >= 20000 and income <= 50000 then 'Average Salary'
+else 'High Salary' end) sal_cat from Accounts),
+cat_table as (SELECT 'High Salary' sal_cat from dual 
+Union all
+SELECT 'Low Salary' sal_cat from dual 
+Union all
+SELECT 'Average Salary' sal_cat from dual ) 
+
+Select cat_table.sal_cat category,nvl(count(account_id),0) accounts_count from cat_table left join big_table
+on big_table.sal_cat=cat_table.sal_cat group by cat_table.sal_cat;
+
+1978. Employees Whose Manager Left the Company
+
+Select E.employee_id from Employees E where E.manager_id is not null and E.manager_id not in (Select E1.employee_id from Employees E1 where E1.employee_id = E.manager_id) and E.salary < 30000 order by employee_id;
+
+626. Exchange Seats
+
+with oddtab as (Select nvl(decode(mod(B.id,2),1,A.id-1,0,A.id+1),A.id)
+ id,A.student from Seat A left join Seat B on A.id+1 = B.id 
+ where mod((Select count(1) from Seat S2 ),2)<> 0 order by id),
+ eventab as (Select decode(mod(A.id,2),1,A.id+1,0,A.id-1)
+ id,A.student from Seat A where mod((Select count(1) from Seat S2 ),2)= 0 order by id)
+
+ Select * from oddtab
+ union all
+ Select * from eventab;
+ 
+ 1341. Movie Rating
+
+Select name results from (Select U.name ,count(U.name) from Users U,MovieRating M where U.user_id = M.user_id
+group by U.name  order by count(U.name) desc, U.name asc) where rownum =1
+union all
+Select title results from (Select M.title,avg(Mr.rating) from Movies M , Movierating MR where M.movie_id = Mr.movie_id and Mr.created_at >= to_date('01/02/2020','DD/MM/YYYY') and Mr.created_at <= to_date('29/02/2020','DD/MM/YYYY') group by M.title order by avg(Mr.rating) desc,M.title asc) where rownum = 1;
+
+1321. Restaurant Growth
+
+WITH week_table AS (   
+    SELECT 
+        DISTINCT a.visited_on AS start_date,
+        b.visited_on AS end_date
+    FROM customer a
+    JOIN customer b ON b.visited_on - a.visited_on = 6;
+)
+
+SELECT 
+    to_char(w.start_date + 6, 'YYYY-MM-DD') AS visited_on,
+    SUM(c.amount) AS amount,
+    ROUND(SUM(c.amount)/7 ,2) AS average_amount
+FROM week_table w, customer c
+WHERE c.visited_on BETWEEN w.start_date AND w.end_date
+GROUP BY w.start_date
+ORDER BY visited_on;
+
+1667. Fix Names in a Table
+
+Select user_id,Upper(substr(name,1,1))||lower(substr(name,2)) name from Users order by user_id;
+
+1527. Patients With a Condition
+
+Select patient_id,patient_name,conditions from Patients where conditions like 'DIAB1%' or conditions like '% DIAB1%';
+
+196. Delete Duplicate Emails
+
+delete from person P where P.id  not in (Select min(P1.id) from person P1 where P1.email= P.email);
+
+176. Second Highest Salary
+
+with ranktab as (select id,
+    salary, dense_rank() OVER (ORDER BY salary desc) rn
+  from Employee)
+
+  Select case when (Select count(1) from Employee E) > 1 then (Select ranktab.salary  from ranktab where rn = 2 and rownum =1)
+  else (Select null from dual) end SecondHighestSalary from dual ;
+  
+1484. Group Sold Products By The Date
+
+Select to_char(sell_date,'YYYY-MM-DD') sell_date,count(distinct product) num_sold,LISTAGG(product,',') WITHIN GROUP (ORDER BY product) products from (Select distinct sell_date, product from Activities A ) group by sell_date;
